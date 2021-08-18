@@ -7,15 +7,44 @@
 </head>
 
 <body>
-    <p>Click the button to modify an existing PDF document with <code>pdf-lib</code></p>
-    <button onclick="modifyPdf()">Modify PDF</button>
-    <p class="small">(Your browser will download the resulting file)</p>
+
+    <div style="margin-left: auto; margin-right: auto; width: 500px;">
+        <h2>Devient infirmier créé ton test PCR</h2>
+
+        <p>Prenom:</p>
+        <input id="nom" autocomplete="name">
+        <p>Nom:</p>
+        <input id="surname" autocomplete="family-name">
+        <p>Date naissance (JJ/MM/AAAA):</p>
+        <input id="dateNaissance" autocomplete="bday">
+        <p>Age:</p>
+        <input id="age">
+        <p>Adresse:</p>
+        <input id="address" autocomplete="street-address">
+        <p>Code postale et ville:</p>
+        <input id="cpCity" autocomplete="postal-code">
+        <p>Date du test (JJ/MM/AA):</p>
+        <input id="dateTest">
+        <p>Homme ou fomme (H ou F):</p>
+        <input id="hf">
+        <p></p>
+        <button onclick="modifyPdf()">Download PCR</button>
+    </div>
+    
 </body>
 
 <script>
     const { degrees, PDFDocument, rgb, StandardFonts } = PDFLib
 
     async function modifyPdf() {
+        let nom = document.getElementById("nom").value;
+        let surname = document.getElementById("surname").value;
+        let dateNaissance = document.getElementById("dateNaissance").value;
+        let age = document.getElementById("age").value;
+        let address = document.getElementById("address").value;
+        let cpCity = document.getElementById("cpCity").value;
+        let dateTest= document.getElementById("dateTest").value;
+        let hf= document.getElementById("hf").value;
         // Fetch an existing PDF document
         const url = 'https://jeandidier3.github.io/PCR.pdf'
         console.log("url ", url)
@@ -25,8 +54,8 @@
 
         // Embed the Helvetica font
         const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
-       const helveticaBold= await pdfDoc.embedFont(StandardFonts.HelveticaBold)
-       const helveticaOblique= await pdfDoc.embedFont(StandardFonts.HelveticaOblique)
+        const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+        const helveticaOblique = await pdfDoc.embedFont(StandardFonts.HelveticaOblique)
         // Get the first page of the document
         const pages = pdfDoc.getPages()
         const firstPage = pages[0]
@@ -35,76 +64,86 @@
         const { width, height } = firstPage.getSize()
 
         // Draw a string of text diagonally across the first page verdana pro en 11pt bold
-        firstPage.drawText('Monsieur LOUARN GLENN', {
+        if(hf.toUpperCase()=="H"){
+        firstPage.drawText('Monsieur '+ surname.toUpperCase()+ " "+nom.toUpperCase(), {
             x: 310,
             y: height / 2 + 255,
             size: 12,
             font: helveticaBold,
-            color: rgb(0,0,0),
+            color: rgb(0, 0, 0),
         })
+        }else{
+        firstPage.drawText('Madame '+ surname.toUpperCase()+ " "+nom.toUpperCase(), {
+            x: 310,
+            y: height / 2 + 255,
+            size: 12,
+            font: helveticaBold,
+            color: rgb(0, 0, 0),
+        })
+        }
         // verdana pro en 11pt bold
-        firstPage.drawText(' LOUARN', {
-            x: 343,
+        firstPage.drawText(surname.toUpperCase(), {
+            x: 345,
             y: height / 2 + 239,
             size: 11,
             font: helveticaBold,
-            color: rgb(0,0,0),
+            color: rgb(0, 0, 0),
         })
         // // verdana regular en 10pt bold
-        firstPage.drawText('91 rue de la ville d\'ys'.toUpperCase(), {
+        firstPage.drawText(address.toUpperCase(), {
             x: 310,
             y: height / 2 + 225,
             size: 11,
             font: helveticaFont,
-            color: rgb(0,0,0),
+            color: rgb(0, 0, 0),
         })
         // // verdana regular en 10pt bold
-        firstPage.drawText('29200 BREST'.toUpperCase(), {
+        firstPage.drawText(cpCity.toUpperCase(), {
             x: 310,
             y: height / 2 + 195,
             size: 11,
             font: helveticaFont,
-            color: rgb(0,0,0),
+            color: rgb(0, 0, 0),
         })
         // verdana regular en 7pt bold (enregistré le)
-        firstPage.drawText('13/08/2021     10h00', {
-            x: 54,
-            y: height / 2 + 177,
-            size: 8,
+        firstPage.drawText(dateTest+'        10H00', {
+            x: 52,
+            y: height / 2 + 178,
+            size: 7,
             font: helveticaFont,
-            color: rgb(0,0,0),
+            color: rgb(0, 0, 0),
         })
         // verdana regular en 7pt bold (prélevé le)
-        firstPage.drawText('13/08/2021', {
-            x: 43,
-            y: height / 2 + 169,
-            size: 8,
+        firstPage.drawText(dateTest, {
+            x: 42,
+            y: height / 2 + 168,
+            size: 7,
             font: helveticaFont,
-            color: rgb(0,0,0),
+            color: rgb(0, 0, 0),
         })
         // verdana pro bold en 9pt bold code bizarre
-        firstPage.drawText('24/10/2021-S-3214', {
+        firstPage.drawText(dateTest+'-S-3214', {
             x: 73,
-            y: height / 2 + 158,
+            y: height / 2 + 156,
             size: 11,
             font: helveticaBold,
-            color: rgb(0,0,0),
+            color: rgb(0, 0, 0),
         })
         // verdana regular en 7pt bold
-        firstPage.drawText('24/10/1999 (21) (G)', {
+        firstPage.drawText(dateNaissance+' ('+age+') ('+hf.toUpperCase()+')', {
             x: 80,
-            y: height / 2 + 145,
+            y: height / 2 + 143,
             size: 7,
             font: helveticaFont,
-            color: rgb(0,0,0),
+            color: rgb(0, 0, 0),
         })
         // verdana italic en 7pt (validé le)
-        firstPage.drawText('13/08/2021', {
-            x: 390,
-            y:  55,
-            size: 7,
+        firstPage.drawText(dateTest, {
+            x: 389,
+            y: 55,
+            size: 9,
             font: helveticaFont,
-            color: rgb(0,0,0),
+            color: rgb(0, 0, 0),
         })
 
         // Serialize the PDFDocument to bytes (a Uint8Array)
