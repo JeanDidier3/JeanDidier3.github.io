@@ -15,6 +15,8 @@
         <input id="nom" autocomplete="name">
         <p>Nom:</p>
         <input id="surname" autocomplete="family-name">
+        <p>Nom de famille (naissance):</p>
+        <input id="surnameN" autocomplete="family-name">
         <p>Date naissance (JJ/MM/AAAA):</p>
         <input id="dateNaissance" autocomplete="bday">
         <p>Age:</p>
@@ -39,6 +41,7 @@
     async function modifyPdf() {
         let nom = document.getElementById("nom").value;
         let surname = document.getElementById("surname").value;
+        let surnameN = document.getElementById("surnameN").value;
         let dateNaissance = document.getElementById("dateNaissance").value;
         let age = document.getElementById("age").value;
         let address = document.getElementById("address").value;
@@ -82,7 +85,7 @@
         })
         }
         // verdana pro en 11pt bold
-        firstPage.drawText(surname.toUpperCase(), {
+        firstPage.drawText(surnameN.toUpperCase(), {
             x: 345,
             y: height / 2 + 239,
             size: 11,
